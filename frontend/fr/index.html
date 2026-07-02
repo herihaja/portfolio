@@ -267,10 +267,50 @@
 
     <section class="section">
       <div class="container narrow">
-        <div class="contact-box">
+        <form id="contact-form" class="contact-box">
           <h2>Construisons des systèmes fiables.</h2>
 
           <p>Disponible pour des opportunités backend en remote.</p>
+
+          <div class="form-grid">
+            <label>
+              Nom
+              <input type="text" name="name" required placeholder="Votre nom" />
+            </label>
+
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="vous@exemple.com"
+              />
+            </label>
+
+            <label class="full-width">
+              Sujet
+              <input
+                type="text"
+                name="subject"
+                required
+                placeholder="Parlez de votre projet"
+              />
+            </label>
+
+            <label class="full-width">
+              Message
+              <textarea
+                name="message"
+                required
+                rows="5"
+                placeholder="Dites-m'en plus sur votre besoin"
+              ></textarea>
+            </label>
+          </div>
+
+          <button type="submit" class="btn">Envoyer</button>
+          <p id="contact-form-status" class="contact-form-status"></p>
 
           <div class="contact-links">
             <a href="mailto:heriinfo@gmail.com"> heriinfo@gmail.com </a>
@@ -281,8 +321,10 @@
               LinkedIn
             </a>
           </div>
-        </div>
+        </form>
       </div>
     </section>
+
+    <script src="../js/common.js"></script>
   </body>
 </html>
