@@ -17,29 +17,36 @@ https://herihaja.ddns.net
 
 ---
 
-# Tech Stack
+# System Architecture
 
 ## Frontend
 
-- HTML5
-- CSS3
-- Vanilla JavaScript
+- Static HTML/CSS/JavaScript frontend
+- Multilingual interface
+- NGINX-served static assets
 
 ## Backend
 
-- FastAPI
-- Pydantic
-- Uvicorn
+- FastAPI REST API
+- SQLAlchemy ORM with PostgreSQL
+- Pydantic validation layer
+- JWT-protected admin endpoints
+- SMTP notification service
+- Background email processing
 
 ## Infrastructure
 
-- Docker Compose
-- NGINX
+- Docker Compose deployment
+- NGINX reverse proxy
+- HTTPS with Certbot
+- Environment-based configuration
 
-## Engineering Focus
+## Operational Concerns
 
-- REST API endpoints
-- FastAPI backend
+- Origin validation
+- IP-based rate limiting
+- Visit analytics & monitoring
+- Structured production logging
 
 ---
 
@@ -88,6 +95,37 @@ portfolio/
 docker compose up --build
 ```
 
+Create a local `.env` file from the example before starting services:
+
+```bash
+cp .env.example .env
+```
+
+## Running Tests
+
+Because the backend runs in Docker Compose, run tests from the backend container.
+
+Start a shell inside the backend service:
+
+```bash
+docker compose run --rm backend bash
+```
+
+Then install the dev dependencies and execute pytest:
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+pytest -q
+```
+
+Or run the full sequence in one command without an interactive shell:
+
+```bash
+docker compose run --rm backend bash -lc "python3 -m pip install -r requirements-dev.txt && pytest -q"
+```
+
+Update `.env` with your SMTP credentials, database password, and admin secrets.
+
 Frontend:
 
 ```text
@@ -129,7 +167,7 @@ Response:
 ## Version
 
 ```http
-GET /version
+GET /api/version
 ```
 
 Response:
@@ -140,6 +178,65 @@ Response:
   "version": "1.0.0"
 }
 ```
+
+---
+
+## Contact Endpoint
+
+```http
+POST /api/contact
+```
+
+Request body:
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "subject": "Project inquiry",
+  "message": "I would like to talk about a backend project."
+}
+```
+
+This endpoint is used by the frontend contact form and includes a custom header for request validation.
+
+## Admin Endpoints
+
+### Admin login
+
+```http
+POST /api/admin/login
+```
+
+Request body:
+
+```json
+{
+  "username": "admin",
+  "password": "your_admin_password"
+}
+```
+
+Response:
+
+```json
+{
+  "token": "<JWT_TOKEN>",
+  "token_type": "bearer"
+}
+```
+
+### List stored messages
+
+```http
+GET /api/admin/messages
+```
+
+Headers:
+
+- `Authorization: Bearer <JWT_TOKEN>`
+
+This endpoint returns the stored contact submissions in the backend database.
 
 ---
 

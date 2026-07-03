@@ -18,6 +18,23 @@ const status = document.getElementById("contact-form-status");
 const lang = document.documentElement.lang?.slice(0, 2).toLowerCase() || "en";
 const texts = translations[lang] || translations.en;
 
+window.addEventListener("load", async () => {
+  try {
+    await fetch("/api/visit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        path: window.location.pathname,
+        lang,
+        title: document.title,
+        referrer: document.referrer || undefined,
+      }),
+    });
+  } catch {
+    // visit logging is non-blocking
+  }
+});
+
 form?.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -39,7 +56,9 @@ form?.addEventListener("submit", async (event) => {
   try {
     const response = await fetch("/api/contact", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
 
