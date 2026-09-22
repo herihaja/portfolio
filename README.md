@@ -13,7 +13,7 @@ Portfolio website using FastAPI and Docker Compose.
 
 ## Live site
 
-https://herihaja.ddns.net
+https://herihaja.gleeze.com
 
 ---
 
